@@ -153,15 +153,127 @@ Time Series Plot: This plot shows how marathon times for men and women have chan
 ## 3 - US counties
 
 ```{r}
+library(tidyverse)
+library(openintro)
 
+data(county)
+ggplot(county) + geom_point(aes(x = median_edu, y = median_hh_income)) +
+  geom_boxplot(aes(x = smoking_ban, y = pop2017))
+  ggplot(county %>% filter(!is.na(median_edu))) + geom_point(aes(x=     homeownership, y = poverty)) + facet_grid(median_edu ~ .) 
+  ggplot(county %>% filter(!is.na(median_edu))) + geom_point(aes(x = homeownership, y = poverty)) + facet_grid(. ~ median_edu) 
+
+# A Plot::
+ggplot(county %>% filter(!is.na(median_edu))) +
+  geom_point(aes(x = homeownership, y = poverty)) +
+  ggtitle("Plot A") +
+  xlab("Homeownership Rate") +
+  ylab("Poverty Rate")
+
+# B Plot::
+ggplot(county %>% filter(!is.na(median_edu))) +
+  geom_point(aes(x = homeownership, y = poverty)) +
+geom_smooth(aes(x = homeownership, y = poverty), se = FALSE, color = "blue") +
+   ggtitle("Plot B") +
+   xlab("Homeownership Rate") +
+   ylab("Poverty Rate")
+
+# C Plot::
+ggplot(county %>% filter(!is.na(median_edu))) +
+   geom_point(aes(x = homeownership, y = poverty)) + 
+   geom_smooth(aes(x = homeownership, y = poverty, color = metro), se = FALSE   )+ 
+   scale_color_manual(values = c("yes" = "green", "no" = "green")) + 
+    ggtitle("Plot C") +
+    xlab("Homeownership Rate") +
+    ylab("Poverty Rate")
+
+# D Plot::
+ggplot(county %>% filter(!is.na(median_edu))) +
+  geom_smooth(aes(x = homeownership, y = poverty, color = metro), se = FALSE) +
+  geom_point(aes(x = homeownership, y = poverty)) +
+  scale_color_manual(values = c("yes" = "blue", "no" = "blue")) +
+  ggtitle("Plot D") +
+  xlab("Homeownership Rate") +
+  ylab("Poverty Rate")
+
+#E Plot::
+ggplot(county) +
+  geom_point(aes(x = homeownership, y = poverty, color = metro), size = 2) +
+  geom_smooth(aes(x = homeownership, y = poverty, linetype = metro), se = FALSE) +
+  ggtitle("Plot E") +
+  xlab("Homeownership Rate") +
+  ylab("Poverty Rate") +
+  theme_minimal()
+
+# F Plot::
+ggplot(county) +
+  geom_point(aes(x = homeownership, y = poverty, color = metro)) +
+  geom_smooth(aes(x = homeownership, y = poverty, color = metro), se = FALSE) +
+  labs(color = "Metro") +
+  ggtitle("Plot F") +
+  xlab("Homeownership Rate") +
+  ylab("Poverty Rate") +
+  theme_minimal()
+
+summary(county)
+str(county)
+head(county)
+tail(county)
+unique(county$metro)
+sum(is.na(county$metro))
+
+# G Plot::
+ggplot(county) +
+  geom_point(aes(x = homeownership, y = poverty, color = metro)) +
+  geom_smooth(aes(x = homeownership, y = poverty), se = FALSE) +
+  labs(color = "Metro") +
+  ggtitle("Plot G") +
+  xlab("Homeownership Rate") +
+  ylab("Poverty Rate") +
+  theme_minimal()
+
+# H Plot::
+ggplot(county) +
+  geom_point(aes(x = homeownership, y = poverty, color = metro)) +
+  labs(color = "Metro") +
+  ggtitle("Plot H") +
+  xlab("Homeownership Rate") +
+  ylab("Poverty Rate") +
+  theme_minimal()
 ```
 
-```         
-```
+**Interpretation:**
 
-```{r}
+For plot A:
 
-```
+This scatter plot shows a negative relationship higher homeownership tends to associate with lower poverty.
+
+For plot B:
+
+The smoothed line makes the negative trend more evident compared to the raw points.
+
+For plot C:
+
+Both metro categories are plotted with green lines this redundancy reduces clarity.
+
+For plot D:
+
+Swapping layers doesn’t fix the redundancy. All metro lines are blue, making grouping meaningless.
+
+For plot E:
+
+This plot uses both color and line type to differentiate metro status, improving clarity.
+
+For plot F:
+
+This is a clean and effective use of color and smoothers for metro vs non-metro comparisons.
+
+For plot G:
+
+This version shows only one trend line but colors points less cluttered but less detail about each group.
+
+For plot H:
+
+Simple and clear view of the raw data, no trend lines included.
 
 ## 4 - Rental apartments in SF
 
