@@ -83,12 +83,7 @@ The plot above shows the distribution of accident times across weekdays and week
 ```         
 ```
 
-## 2 - NYC marathon winners
-
-```         
-```
-
-
+## 2 - NYC marathon winner
 
 ```{r}
 # Load necessary libraries
@@ -143,60 +138,23 @@ scale_shape_manual(values=c(16, 17)) +
 labs(title="Marathon Times Over the Years", x="Year", y="Marathon Time (minutes)") +
 theme_minimal()
 
-
-
-
-
-
-
-  
-
-
 ```
-Interpretation:
-Histogram: Shows the distribution of marathon times, illustrating the shape and spread of the data. Peaks, gaps, and overall density are visible. Box Plot: Provides a summary of the data’s central tendency and spread, highlighting median, quartiles, and outliers.
 
-It does not show the overall distribution shape or frequency details.
-This plot compares marathon times between men and women. Different colors (light blue for men and light pink for women) visually distinguish between the two groups. You can see differences in median times, variability, and potential outliers for each gender.
+Interpretation: Histogram: Shows the distribution of marathon times, illustrating the shape and spread of the data. Peaks, gaps, and overall density are visible. Box Plot: Provides a summary of the data’s central tendency and spread, highlighting median, quartiles, and outliers.
+
+It does not show the overall distribution shape or frequency details. This plot compares marathon times between men and women. Different colors (light blue for men and light pink for women) visually distinguish between the two groups. You can see differences in median times, variability, and potential outliers for each gender.
 
 This plot compares marathon times between men and women. Different colors (light blue for men and light pink for women) visually distinguish between the two groups. You can see differences in median times, variability, and potential outliers for each gender.
 
-Redundancy Removed: Outlier points and extra axis ticks are removed to focus on the main data features. Removing the legend is also considered if it’s redundant (e.g., if the colors are clear from the context). This update enhances the data-to-ink ratio by reducing non-essential visual elements.
+Redundancy Removed: Outliers points and extra axis ticks are removed to focus on the main data features. Removing the legend is also considered if it’s redundant (e.g., if the colors are clear from the context). This update enhances the data-to-ink ratio by reducing non-essential visual elements.
 
-Time Series Plot: This plot shows how marathon times for men and women have changed over the years. Different colors and shapes represent men and women, allowing for a clear comparison of trends and changes in marathon performance over time. This visualization provides insights into how race times have evolved, which is not visible in the histogram or box plots.
-
-```{r}
-
-```
-
-```{r}
-
-```
-
-```         
-```
-
-```{r}
-
-```
-
-```         
-```
+Time Series Plot: This plot shows how marathon times for men and women have changed over the years. Different colors and shapes represent men and women, allowing for a clear comparison of trends and changes in marathon performance over time. This visualization provides insights into how race times have evolved, which is not visible in the histogram or box plot.
 
 ## 3 - US counties
-```{r}
-
-
-
-```
-
-
-```
 
 ```{r}
 
 ```
-
 
 ```         
 ```
