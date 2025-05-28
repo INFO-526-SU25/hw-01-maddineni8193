@@ -1,6 +1,6 @@
 ---
 title: "HW 01"
-author: "Sravani"
+author: "Sravani Maddineni"
 format: 
   html:
     embed-resources: true
@@ -24,43 +24,63 @@ pacman::p_load(tidyverse,
 devtools::install_github("tidyverse/dsbox")
 ```
 
+```{r}
+
+```
+
 ## 1 - Road traffic accidents in Edinburgh
 
-```{## 1 - Road Traffic Accidents in Edinburgh}
+```         
+```
 
-#| message: false
+```{r}
+# Load and glimpse the dataset
 library(tidyverse)
-library(lubridate)
 library(hms)
 
 accidents <- read_csv("data/accidents.csv")
 
-accidents <- accidents |>
+# View structure: number of rows, columns, and variable types
+glimpse(accidents)
+
+```
+
+```{r}
+# Preprocessing: convert date/time and classify as weekend/weekday
+accidents <- accidents %>%
   mutate(
     date = as.Date(date),
     time = as_hms(time),
-    hour = hour(time) + minute(time) / 60,
     day_type = if_else(weekdays(date) %in% c("Saturday", "Sunday"), "Weekend", "Weekday"),
     severity = factor(severity, levels = c("Fatal", "Serious", "Slight"))
   )
 
-#| message: false
-ggplot(accidents, aes(x = hour, fill = severity)) +
+```
+
+```{r}
+# Density plot showing accident times by day type and severity
+ggplot(accidents, aes(x = time, fill = severity)) +
   geom_density(alpha = 0.6) +
   facet_wrap(~day_type, ncol = 1) +
-  scale_fill_manual(values = c("purple", "steelblue", "khaki")) +
+  scale_fill_manual(values = c("Fatal" = "purple", "Serious" = "steelblue", "Slight" = "khaki")) +
   labs(
-    title = "Number of Accidents Throughout the Day",
-    subtitle = "By Day of Week and Severity",
-    x = "Hour of Day",
+    title = "Accident Density in Edinburgh Throughout the Day (2018)",
+    subtitle = "By Day Type (Weekend vs Weekday) and Severity",
+    x = "Time of Day",
     y = "Density",
     fill = "Severity"
   ) +
-  theme_minimal(base_size = 14)
+  theme_minimal()
 
-**Interpretation:**  
-This density plot shows how traffic accidents in Edinburgh vary throughout the day. On weekdays, there are clear morning and evening peaks. On weekends, the peaks occur slightly later. Slight and serious accidents are most common, while fatal accidents are rare.
+```
 
+Interpretation
+
+The dataset contains records of traffic accidents in Edinburgh during 2018. After inspecting the structure with glimpse( ), we see variables such as date, time, location, and severity.
+
+The plot above shows the distribution of accident times across weekdays and weekends. Most accidents happen during morning and evening hours, likely aligned with commuting times. Slight accidents dominate, but serious and fatal ones also peak around the same hours. Weekends show a delay in peak accident time, indicating different travel behavior.
+
+```         
 ```
 
 ## 2 - NYC marathon winners
@@ -69,6 +89,42 @@ This density plot shows how traffic accidents in Edinburgh vary throughout the d
 ```
 
 ## 3 - US counties
+
+```{r}
+
+# Incorrect combined plot
+ggplot(USA) +
+  geom_point(aes(x = median_edu, y = median_hh_income)) +
+  geom_boxplot(aes(x = smoking_ban, y = pop2017))
+
+# Facet row
+ggplot(county %>% filter(!is.na(median_edu))) +
+  geom_point(aes(x = homeownership, y = poverty)) +
+  facet_grid(median_edu ~ .)
+
+# Facet column
+ggplot(county %>% filter(!is.na(median_edu))) +
+  geom_point(aes(x = homeownership, y = poverty)) +
+  facet_grid(. ~ median_edu)
+
+# Plot A to H
+plots <- list(
+  ggplot(county, aes(x = homeownership, y = poverty)) + geom_point(),
+  ggplot(county, aes(x = homeownership, y = poverty)) + geom_point() + geom_smooth(color = "blue", se = FALSE),
+  ggplot(county, aes(x = homeownership, y = poverty)) + geom_point() +
+    geom_smooth(aes(group = metro), method = "loess", span = 1.4, color = "green", se = FALSE),
+  ggplot(county, aes(x = homeownership, y = poverty)) +
+    geom_smooth(aes(group = metro), method = "loess", span = 1.4, color = "blue", se = FALSE) + geom_point(),
+  ggplot(county, aes(x = homeownership, y = poverty, color = metro)) +
+    geom_point() + geom_smooth(aes(group = metro, linetype = metro), method = "loess", span = 1.4, color = "blue", se = FALSE),
+  ggplot(county, aes(x = homeownership, y = poverty, color = metro)) +
+    geom_point() + geom_smooth(aes(group = metro, color = metro), method = "loess", span = 1.4, se = FALSE),
+  ggplot(county, aes(x = homeownership, y = poverty, color = metro)) +
+    geom_point() + geom_smooth(color = "blue", se = FALSE),
+  ggplot(county, aes(x = homeownership, y = poverty, color = metro)) + geom_point()
+)
+
+```
 
 ## 4 - Rental apartments in SF
 
