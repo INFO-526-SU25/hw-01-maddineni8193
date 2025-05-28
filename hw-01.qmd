@@ -88,41 +88,120 @@ The plot above shows the distribution of accident times across weekdays and week
 ```         
 ```
 
-## 3 - US counties
+
+
+```{r}
+# Load necessary libraries
+# install.packages("openintro")
+library(ggplot2)
+library(openintro)
+# Load the dataset
+data("nyc_marathon")
+head(nyc_marathon)
+summary(nyc_marathon)
+# Histogram of marathon times
+ggplot(data = nyc_marathon, aes(x = time)) +
+  geom_histogram(binwidth = 5, fill = "lightblue", color = "black") +
+  labs(
+    title = "Histogram of Marathon Times",
+    x = "Marathon Time (minutes)",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+
+# Box plot of marathon times
+ggplot(nyc_marathon, aes(y=time)) +
+geom_boxplot(fill="lightgreen", color="black") +
+labs(title="Box Plot of Marathon Times", y="Marathon Time (minutes)") +
+  theme_minimal()
+
+# Create Side-by-Side Box Plots for Men and Women
+ggplot(nyc_marathon, aes(x=division, y=time, fill=division)) +
+geom_boxplot(color="black") +
+scale_fill_manual(values=c("lightblue", "lightpink")) +
+labs(title="Box Plot of Marathon Times by Gender", x="Gender", y="Marathon Time (minutes)")+
+  theme_minimal()
+head(nyc_marathon)
+summary(nyc_marathon)
+
+# Identify and Remove Redundant Information::
+ggplot(nyc_marathon, aes(x = division, y = time, fill = division)) +
+  geom_boxplot(show.legend = FALSE) +
+  scale_fill_manual(values = c("Men" = "#ff595e", "Women" = "#8ac926")) +
+  labs(title = "Marathon Times by Gender (Simplified)",
+       x = "Division",
+       y = "Time (Minutes)") +
+  theme_minimal()
+
+# Visualize Marathon Times Over the Years::
+head(nyc_marathon)
+
+ggplot(nyc_marathon, aes(x=year, y=time, color=division, shape=division)) +
+geom_point() +
+scale_color_manual(values=c("lightblue", "lightpink")) +
+scale_shape_manual(values=c(16, 17)) +
+labs(title="Marathon Times Over the Years", x="Year", y="Marathon Time (minutes)") +
+theme_minimal()
+
+
+
+
+
+
+
+  
+
+
+```
+Interpretation:
+Histogram: Shows the distribution of marathon times, illustrating the shape and spread of the data. Peaks, gaps, and overall density are visible. Box Plot: Provides a summary of the data’s central tendency and spread, highlighting median, quartiles, and outliers.
+
+It does not show the overall distribution shape or frequency details.
+This plot compares marathon times between men and women. Different colors (light blue for men and light pink for women) visually distinguish between the two groups. You can see differences in median times, variability, and potential outliers for each gender.
+
+This plot compares marathon times between men and women. Different colors (light blue for men and light pink for women) visually distinguish between the two groups. You can see differences in median times, variability, and potential outliers for each gender.
+
+Redundancy Removed: Outlier points and extra axis ticks are removed to focus on the main data features. Removing the legend is also considered if it’s redundant (e.g., if the colors are clear from the context). This update enhances the data-to-ink ratio by reducing non-essential visual elements.
+
+Time Series Plot: This plot shows how marathon times for men and women have changed over the years. Different colors and shapes represent men and women, allowing for a clear comparison of trends and changes in marathon performance over time. This visualization provides insights into how race times have evolved, which is not visible in the histogram or box plots.
 
 ```{r}
 
-# Incorrect combined plot
-ggplot(USA) +
-  geom_point(aes(x = median_edu, y = median_hh_income)) +
-  geom_boxplot(aes(x = smoking_ban, y = pop2017))
+```
 
-# Facet row
-ggplot(county %>% filter(!is.na(median_edu))) +
-  geom_point(aes(x = homeownership, y = poverty)) +
-  facet_grid(median_edu ~ .)
+```{r}
 
-# Facet column
-ggplot(county %>% filter(!is.na(median_edu))) +
-  geom_point(aes(x = homeownership, y = poverty)) +
-  facet_grid(. ~ median_edu)
+```
 
-# Plot A to H
-plots <- list(
-  ggplot(county, aes(x = homeownership, y = poverty)) + geom_point(),
-  ggplot(county, aes(x = homeownership, y = poverty)) + geom_point() + geom_smooth(color = "blue", se = FALSE),
-  ggplot(county, aes(x = homeownership, y = poverty)) + geom_point() +
-    geom_smooth(aes(group = metro), method = "loess", span = 1.4, color = "green", se = FALSE),
-  ggplot(county, aes(x = homeownership, y = poverty)) +
-    geom_smooth(aes(group = metro), method = "loess", span = 1.4, color = "blue", se = FALSE) + geom_point(),
-  ggplot(county, aes(x = homeownership, y = poverty, color = metro)) +
-    geom_point() + geom_smooth(aes(group = metro, linetype = metro), method = "loess", span = 1.4, color = "blue", se = FALSE),
-  ggplot(county, aes(x = homeownership, y = poverty, color = metro)) +
-    geom_point() + geom_smooth(aes(group = metro, color = metro), method = "loess", span = 1.4, se = FALSE),
-  ggplot(county, aes(x = homeownership, y = poverty, color = metro)) +
-    geom_point() + geom_smooth(color = "blue", se = FALSE),
-  ggplot(county, aes(x = homeownership, y = poverty, color = metro)) + geom_point()
-)
+```         
+```
+
+```{r}
+
+```
+
+```         
+```
+
+## 3 - US counties
+```{r}
+
+
+
+```
+
+
+```
+
+```{r}
+
+```
+
+
+```         
+```
+
+```{r}
 
 ```
 
