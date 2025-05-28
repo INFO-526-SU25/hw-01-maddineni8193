@@ -277,4 +277,70 @@ Simple and clear view of the raw data, no trend lines included.
 
 ## 4 - Rental apartments in SF
 
+```{r}
+#| label: load-credit
+#| message: FALSE
+library(tidyverse)
+library(scales)
+
+# Load the dataset
+credit <- read_csv("data/credit.csv")
+
+#| label: credit-balance-vs-income
+ggplot(credit, aes(x = income, y = balance, color = student, shape = student)) +
+  geom_point(alpha = 0.8, show.legend = FALSE) +
+  geom_smooth(method = "lm", se = FALSE, show.legend = FALSE) +
+  facet_grid(student ~ married, labeller = labeller(
+    student = c("Yes" = "Student: Yes", "No" = "Student: No"),
+    married = c("Yes" = "Married: Yes", "No" = "Married: No")
+  )) +
+  scale_color_manual(values = c("Yes" = "#ff5733", "No" = "#3498db")) +
+  scale_x_continuous(labels = label_dollar(prefix = "$", suffix = "K")) +
+  scale_y_continuous(labels = label_dollar(prefix = "$")) +
+  labs(
+    title = "Income vs. Credit Card Balance by Student & Marital Status",
+    x = "Income",
+    y = "Credit Card Balance"
+  ) +
+  theme_minimal()
+
+#| label: credit-utilization
+# Calculate utilization
+credit <- credit %>%
+  mutate(utilization = balance / limit)
+
+# Plot utilization vs income
+ggplot(credit, aes(x = income, y = utilization, color = student, shape = student)) +
+  geom_point(alpha = 0.8, show.legend = FALSE) +
+  geom_smooth(method = "lm", se = FALSE, show.legend = FALSE) +
+  facet_grid(student ~ married, labeller = labeller(
+    student = c("Yes" = "Student: Yes", "No" = "Student: No"),
+    married = c("Yes" = "Married: Yes", "No" = "Married: No")
+  )) +
+  scale_color_manual(values = c("Yes" = "#ff5733", "No" = "#3498db")) +
+  labs(
+    title = "Income vs. Credit Utilization by Student & Marital Status",
+    x = "Income",
+    y = "Credit Utilization"
+  ) +
+  theme_minimal()
+
+
+
+
+
+
+ 
+```
+
+Interpretation:
+
+In part (a), the plot shows how income is related to credit card balance, separated by whether someone is a student and whether they are married. We can see that people with higher incomes tend to have higher credit card balances. However, students especially those who are not married tend to carry higher balances even if they earn less. This suggests that being a student might lead to more credit usage.
+
+In part (b), based on what we see in the plot, the variables "student" and "married" seem useful for predicting credit card balance. This is because the relationship between income and balance changes depending on whether someone is a student or married.
+
+In part (c), we looked at credit utlization, which is how much of their credit limit someone is using (balance ÷ limit). The plot shows that students generally have higher utilization rates. Unlike balance, utilization doesn’t increase as clearly with income, which means people with more income don’t always use more of their credit.
+
+In part (d), we can see that the relationship between income and credit utilization is not as strong as it is with credit balance. So, while income helps explain balance, it doesn't explain utilization as well. This is important because utilization tells us more about how someone is managing their available credit, not just how much they owe.
+
 ## 5 - Napoleon’s march.
