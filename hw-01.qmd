@@ -292,16 +292,14 @@ ggplot(credit, aes(x = income, y = balance, color = student, shape = student)) +
   geom_smooth(method = "lm", se = FALSE, show.legend = FALSE) +
   facet_grid(student ~ married, labeller = labeller(
     student = c("Yes" = "Student: Yes", "No" = "Student: No"),
-    married = c("Yes" = "Married: Yes", "No" = "Married: No")
-  )) +
+    married = c("Yes" = "Married: Yes", "No" = "Married: No"))) +
   scale_color_manual(values = c("Yes" = "#ff5733", "No" = "#3498db")) +
   scale_x_continuous(labels = label_dollar(prefix = "$", suffix = "K")) +
   scale_y_continuous(labels = label_dollar(prefix = "$")) +
   labs(
     title = "Income vs. Credit Card Balance by Student & Marital Status",
     x = "Income",
-    y = "Credit Card Balance"
-  ) +
+    y = "Credit Card Balance") +
   theme_minimal()
 
 #| label: credit-utilization
@@ -315,14 +313,11 @@ ggplot(credit, aes(x = income, y = utilization, color = student, shape = student
   geom_smooth(method = "lm", se = FALSE, show.legend = FALSE) +
   facet_grid(student ~ married, labeller = labeller(
     student = c("Yes" = "Student: Yes", "No" = "Student: No"),
-    married = c("Yes" = "Married: Yes", "No" = "Married: No")
-  )) +
+    married = c("Yes" = "Married: Yes", "No" = "Married: No"))) +
   scale_color_manual(values = c("Yes" = "#ff5733", "No" = "#3498db")) +
   labs(
     title = "Income vs. Credit Utilization by Student & Marital Status",
-    x = "Income",
-    y = "Credit Utilization"
-  ) +
+    x = "Income", y = "Credit Utilization") +
   theme_minimal()
 
 
@@ -344,3 +339,96 @@ In part (c), we looked at credit utlization, which is how much of their credit l
 In part (d), we can see that the relationship between income and credit utilization is not as strong as it is with credit balance. So, while income helps explain balance, it doesn't explain utilization as well. This is important because utilization tells us more about how someone is managing their available credit, not just how much they owe.
 
 ## 5 - Napoleon’s march.
+
+```{r}
+library(ggplot2)
+library(scales)
+library(gridExtra)
+library(dplyr)
+library(ggrepel)
+library(readr)
+
+napoleon <- read_rds("./data/napoleon.rds")
+Minard.troops <- napoleon$troops
+Minard.cities <- napoleon$cities
+Minard.temp <- napoleon$temp
+summary(Minard.troops)
+summary(Minard.cities)
+summary(Minard.temp)
+# Define breaks for the size scale
+breaks <- c(1, 2, 3) * 10^5
+
+plot_troops_detailed <- ggplot(Minard.troops, aes(x = long, y = lat)) +
+  geom_path(aes(size = survivors, colour = direction, group = group),
+            lineend = "round") +
+  geom_point(data = Minard.cities, aes(x = long, y = lat),
+             color = "red", size = 3, shape = 21, fill = "white") +
+  geom_text_repel(data = Minard.cities, aes(x = long, y = lat, label = city),
+                  size = 3, nudge_x = 0.5, nudge_y = 0.5) +
+  scale_size(name = "Survivors", range = c(1, 10),
+             breaks = breaks, labels = scales::comma(breaks)) +
+  scale_color_manual(name = "Direction",
+                     values = c("Advance" = "#E8CBAB", "Retreat" = "#1F1A1B")) +
+  coord_cartesian(xlim = c(24, 38)) +
+  labs(x = NULL, y = NULL) +
+  guides(color = FALSE, size = FALSE) +
+  theme_void()
+
+# To display the plot
+plot_troops_detailed
+
+# Prepare labels for the temperature plot
+Minard.temp <- Minard.temp %>%
+mutate(label = paste0(temp, "° ", date))
+# Create the temperature plot
+plot_temp <- ggplot(Minard.temp, aes(long, temp)) +
+geom_path(color = "grey", size = 1.5) +
+geom_point(size = 1) +
+geom_text_repel(aes(label = label), size = 2.5) +
+coord_cartesian(xlim = c(24, 38)) +
+labs(x = NULL, y = "Temperature") +
+theme_bw() +
+theme(panel.grid.major.x = element_blank(),
+panel.grid.minor.x = element_blank(),
+panel.grid.minor.y = element_blank(),
+axis.text.x = element_blank(),
+axis.ticks = element_blank(),
+panel.border = element_blank())
+plot_temp
+grid.arrange(plot_troops_detailed, plot_temp, nrow = 2, heights = c(3.5, 1.2))
+
+```
+
+Description:
+
+First section installs and loads the required R packages for data manipulation
+and plotting. It then reads the napoleon.rds file to load the datasets containing information
+on troops, cities, and temperatures.
+Reference: Friendly, M. (2018, January 22). Minard meets ggplot2. Retrieved February 16,
+2025, from http://euclid.psych.yorku.ca/www/psy6135/tutorials/Minard.html.
+
+The code generates a detailed plot of Napoleon’s troop movements. It uses
+geom_path to illustrate the route of the troops, with line thickness varying based on the number
+of survivors. geom_point is used to mark the locations of cities, while geom_text_repel adds
+city labels, avoiding overlap. scale_size and scale_color_manual customize the appearance
+of the plot by adjusting the size and color, respectively. coord_cartesian is applied to set
+the x-axis limits, and theme_void removes all additional elements like axis lines and labels for a clean presentation.
+
+This code generates a plot depicting temperature changes along the route. It
+uses geom_path to trace the temperature variations, geom_point to display data points, and
+geom_text_repel to label the temperature data while preventing overlap. coord_cartesian
+sets the x-axis limits, and theme_bw provides a clean, minimal background. Additionally, theme
+is used to further customize the plot by removing grid lines and axis ticks for a streamlined appearance.
+
+grid.arrange combines the two plots into a single graphic, arranging them
+vertically with specified row heights for optimal alignment.
+Resources Used:
+1. Blog Post: Friendly, M. (2018, January 22). Minard meets ggplot2. Retrieved February
+16, 2025, from http://euclid.psych.yorku.ca/www/psy6135/tutorials/Minard.html
+2. ggplot2 Documentation: For an in-depth understanding of geom_path(),
+scale_size(), and other functions within the ggplot2 package.
+Personalization and Adjustments:
+• City Points and Labels: Added red city points and a yellow fill to enhance the visibility
+of city locations. Used geom_text_repel to ensure city labels are readable and avoid
+overlap.
+• Plot Appearance: Customized themes and labels to align with Minard’s original style
